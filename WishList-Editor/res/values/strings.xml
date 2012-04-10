@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Wishlist Editor</string>
+    <string name="password">Wishlist Password</string>
+    <string-array name="wishlists">
+        <item >UNKNOWN</item>
+    </string-array>
+    <string name="submit">Change Wishlist</string>
+    <string name="addhint">Item Name to Add</string>
+    <string name="listshow">Show Wishlist</string>
+
+</resources>
