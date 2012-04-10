@@ -131,7 +131,7 @@ public class WishlistEditActivity extends Activity {
 	return website;
 	}
 	
-	public static void postData(String url, String[] ids, String[] values) {
+	public static int postData(String url, String[] ids, String[] values) {
 	    // Create a new HttpClient and Post Header
 	    HttpClient httpclient = new DefaultHttpClient();
 	    HttpPost httppost = new HttpPost(url);
@@ -147,13 +147,14 @@ public class WishlistEditActivity extends Activity {
 
 	        // Execute HTTP Post Request
 	        httpclient.execute(httppost);
+	        return 0;
 	        }else{
-	        	return;
+	        	return -1;
 	        }
 	    } catch (ClientProtocolException e) {
-	    	return;
+	    	return -1;
 	    } catch (IOException e) {
-	    	return;
+	    	return -1;
 	    }
 	} 
 	
