@@ -18,6 +18,7 @@ public final class R {
     }
     public static final class id {
         public static final int add=0x7f060002;
+        public static final int changedefault=0x7f060005;
         public static final int go=0x7f060003;
         public static final int password=0x7f060001;
         public static final int showlist=0x7f060004;
@@ -29,6 +30,7 @@ public final class R {
     public static final class string {
         public static final int addhint=0x7f040003;
         public static final int app_name=0x7f040000;
+        public static final int defaults=0x7f040005;
         public static final int listshow=0x7f040004;
         public static final int password=0x7f040001;
         public static final int submit=0x7f040002;

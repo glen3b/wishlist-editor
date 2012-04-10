@@ -39,6 +39,7 @@ import org.apache.http.message.BasicNameValuePair;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
@@ -52,6 +53,7 @@ import android.widget.Spinner;
 public class WishlistEditActivity extends Activity {
     
 	private Button submit;
+	private Button chdefault;
 	private EditText passwd;
 	private EditText add_item;
 	private Spinner wishlist_choose;
@@ -163,21 +165,27 @@ public class WishlistEditActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        chdefault = (Button) findViewById(R.id.changedefault);
         submit = (Button) findViewById(R.id.go);
         showlist = (Button) findViewById(R.id.showlist);
         passwd = (EditText) findViewById(R.id.password);
         wishlist_choose = (Spinner) findViewById(R.id.wishlist);
+        final SharedPreferences data = getSharedPreferences("Wishlist_Cloud_Editor", 0);
+        if(data.getString("instance_url", null) == null){
         final EditText input = new EditText(this);
-        input.setText("http://192.168.1.101/teacher-wishlist/wishlist-edit.php");
+        // input.setText("http://192.168.1.101/teacher-wishlist/wishlist-edit.php");
         input.setInputType(android.text.InputType.TYPE_TEXT_VARIATION_URI);
         new AlertDialog.Builder(this)
         .setTitle("Instance URL")
-        .setMessage("Please input the URL to the wishlist-edit.php file")
+        .setMessage("Please input the URL to the wishlist-edit.php file you want to use")
         .setView(input)
         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 Editable value = input.getText();
                 instance_url = value.toString();
+                SharedPreferences.Editor dataedit = data.edit();
+                dataedit.putString("instance_url", instance_url);
+                dataedit.commit();
                 String[] wishlists = downloadFile(makeURL(instance_url+"?listwishlist=ok"));
                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(WishlistEditActivity.this, 
                 		android.R.layout.simple_spinner_item, wishlists);
@@ -189,6 +197,42 @@ public class WishlistEditActivity extends Activity {
                 finish();
             }
         }).show();
+        }else{
+        	instance_url = data.getString("instance_url", null);
+            String[] wishlists = downloadFile(makeURL(instance_url+"?listwishlist=ok"));
+            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(WishlistEditActivity.this, 
+            		android.R.layout.simple_spinner_item, wishlists);
+            spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            wishlist_choose.setAdapter(spinnerArrayAdapter);
+        }
+        chdefault.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+            	final EditText input = new EditText(WishlistEditActivity.this);
+                input.setText(data.getString("instance_url", null));
+                input.setInputType(android.text.InputType.TYPE_TEXT_VARIATION_URI);
+                new AlertDialog.Builder(WishlistEditActivity.this)
+                .setTitle("Instance URL")
+                .setMessage("Please input the URL to the wishlist-edit.php file you want to use")
+                .setView(input)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        Editable value = input.getText();
+                        instance_url = value.toString();
+                        SharedPreferences.Editor dataedit = data.edit();
+                        dataedit.putString("instance_url", instance_url);
+                        dataedit.commit();
+                        String[] wishlists = downloadFile(makeURL(instance_url+"?listwishlist=ok"));
+                        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(WishlistEditActivity.this, 
+                        		android.R.layout.simple_spinner_item, wishlists);
+                        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        wishlist_choose.setAdapter(spinnerArrayAdapter);
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                    }
+                }).show();
+              }
+        });
         add_item = (EditText) findViewById(R.id.add);
         submit.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
