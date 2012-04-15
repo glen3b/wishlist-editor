@@ -199,7 +199,8 @@ public class WishlistEditActivity extends Activity {
         final SharedPreferences data = getSharedPreferences("Wishlist_Cloud_Editor", 0);
         Button update = (Button) findViewById(R.id.update);
         try {
-			if(Float.parseFloat(downloadFile(makeURL("http://wishlist-editor.googlecode.com/files/wapp_latestversion"))[0]) > Float.parseFloat(getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0 ).versionName)){
+			Log.i("WishlistEditActivity", "Latest version is "+downloadFile(makeURL("http://wishlist-editor.googlecode.com/files/wapp_latestversion"))[0]+", current version is "+getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0 ).versionName);
+        	if(Float.parseFloat(downloadFile(makeURL("http://wishlist-editor.googlecode.com/files/wapp_latestversion"))[0]) > Float.parseFloat(getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0 ).versionName)){
 				update.setVisibility(View.VISIBLE);
 				update.setOnClickListener(new View.OnClickListener() {
 		            public void onClick(View v) {
