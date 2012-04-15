@@ -28,6 +28,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -109,6 +110,19 @@ public class WishlistEditActivity extends Activity {
 		return returnedArray;
 		}
 	
+	void makeSimpleConfirmDialog(String title, String message){
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		if(message != null) builder.setMessage(message);
+		if(title != null) builder.setTitle(title);
+		builder.setCancelable(true);
+		builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		                dialog.cancel();
+		           }
+		       });
+		builder.show();
+	}
+	
 	/**
 	 * Makes a URL from a string without the need for a try/catch.
 	 * @see java.net.URL URL
@@ -131,6 +145,14 @@ public class WishlistEditActivity extends Activity {
 	return website;
 	}
 	
+	/**
+	 * Post data to a URL.
+	 * @author Glen Husman
+	 * @param url The URL to post data to.
+	 * @param ids The array of IDs of POST variables.
+	 * @param values The array of values of POST variables.
+	 * @return The HTTP status code of the request.
+	 */
 	public static int postData(String url, String[] ids, String[] values) {
 	    // Create a new HttpClient and Post Header
 	    HttpClient httpclient = new DefaultHttpClient();
@@ -146,8 +168,8 @@ public class WishlistEditActivity extends Activity {
 	        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
 	        // Execute HTTP Post Request
-	        httpclient.execute(httppost);
-	        return 0;
+	        HttpResponse result = httpclient.execute(httppost);
+	        return result.getStatusLine().getStatusCode();
 	        }else{
 	        	return -1;
 	        }
@@ -247,7 +269,20 @@ public class WishlistEditActivity extends Activity {
             	Log.d("WishlistEditActivity", "Current add item for wishlist: "+add); //$NON-NLS-1$ //$NON-NLS-2$
             	String[] ids = {"password", "teacherchoice", "concat"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
             	String[] values = {password, wishlist_raw, add};
-				postData(instance_url , ids, values);
+				int status = postData(instance_url, ids, values);
+				if(status == -1){
+					// Function error
+					makeSimpleConfirmDialog("ERROR", "An error occurred sending the request.");
+				}else if(status == 403){
+					// Wishlist or file error
+					makeSimpleConfirmDialog("ERROR", "An error occurred finding the wishlist or opening the file.");
+				}else if(status == 401){
+					// Invalid password
+					makeSimpleConfirmDialog("ERROR", "Your wishlist password was incorrect.");
+				}else if(status == 500){
+					// Web script error
+					makeSimpleConfirmDialog("ERROR", "An error occurred in the script. Please contact the server administrator.");
+				}
               }
         });
         showlist.setOnClickListener(new OnClickListener() {
@@ -279,6 +314,7 @@ public class WishlistEditActivity extends Activity {
             	    	       .setPositiveButton("Rename", new DialogInterface.OnClickListener() {
             	    	           public void onClick(DialogInterface dialog, int id) {
             	    	        	   final EditText input = new EditText(WishlistEditActivity.this);
+            	    	        	   input.setText(wlist[itemid_dialog]);
             	    	               new AlertDialog.Builder(WishlistEditActivity.this)
             	    	               .setTitle("Rename")
             	    	               .setMessage("Please input the new name for the item")
@@ -288,7 +324,20 @@ public class WishlistEditActivity extends Activity {
             	    	                       Editable value = input.getText();
             	    	                       String[] post_vars = {"teacherchoice", "password", "find", "replace"};
                     	    	        	   String[] post_data = {(String) wishlist_choose.getSelectedItem(), md5(passwd.getText().toString()), wlist[itemid_dialog], value.toString()};
-                    	    	        	   postData(instance_url, post_vars, post_data);
+                    	    	        	   int status = postData(instance_url, post_vars, post_data);
+                    	    					if(status == -1){
+                    	    						// Function error
+                    	    						makeSimpleConfirmDialog("ERROR", "An error occurred sending the request.");
+                    	    					}else if(status == 403){
+                    	    						// Wishlist or file error
+                    	    						makeSimpleConfirmDialog("ERROR", "An error occurred finding the wishlist or opening the file.");
+                    	    					}else if(status == 401){
+                    	    						// Invalid password
+                    	    						makeSimpleConfirmDialog("ERROR", "Your wishlist password was incorrect.");
+                    	    					}else if(status == 500){
+                    	    						// Web script error
+                    	    						makeSimpleConfirmDialog("ERROR", "An error occurred in the script. Please contact the server administrator.");
+                    	    					}
             	    	                   }
             	    	               }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             	    	                   public void onClick(DialogInterface dialog, int whichButton) {
@@ -303,9 +352,22 @@ public class WishlistEditActivity extends Activity {
             	    	       })
             	    	       .setNegativeButton("Remove", new DialogInterface.OnClickListener() {
             	    	           public void onClick(DialogInterface dialog, int id) {
-            	    	        	   String[] post_vars = {"teacherchoice", "password", "item"};
+            	    	        	   String[] post_vars = {"teacherchoice", "password", "remove"};
             	    	        	   String[] post_data = {(String) wishlist_choose.getSelectedItem(), md5(passwd.getText().toString()), wlist[itemid_dialog]};
-            	    	        	   postData(instance_url, post_vars, post_data);
+            	    	        	   int status = postData(instance_url, post_vars, post_data);
+           	    					   if(status == -1){
+           	    						// Function error
+           	    						makeSimpleConfirmDialog("ERROR", "An error occurred sending the request.");
+           	    					   }else if(status == 403){
+           	    						// Wishlist or file error
+           	    						makeSimpleConfirmDialog("ERROR", "An error occurred finding the wishlist or opening the file.");
+           	    					   }else if(status == 401){
+           	    						// Invalid password
+           	    						makeSimpleConfirmDialog("ERROR", "Your wishlist password was incorrect.");
+           	    					   }else if(status == 500){
+           	    						// Web script error
+           	    						makeSimpleConfirmDialog("ERROR", "An error occurred in the script. Please contact the server administrator.");
+           	    					}
             	    	           }
             	    	       });
             	    	builder.show();
