@@ -40,10 +40,7 @@ import org.apache.http.message.BasicNameValuePair;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
@@ -197,6 +194,7 @@ public class WishlistEditActivity extends Activity {
         passwd = (EditText) findViewById(R.id.password);
         wishlist_choose = (Spinner) findViewById(R.id.wishlist);
         final SharedPreferences data = getSharedPreferences("Wishlist_Cloud_Editor", 0);
+<<<<<<< HEAD
         Button update = (Button) findViewById(R.id.update);
         try {
 			Log.i("WishlistEditActivity", "Latest version is "+downloadFile(makeURL("http://wishlist-editor.googlecode.com/files/wapp_latestversion"))[0]+", current version is "+getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0 ).versionName);
@@ -214,6 +212,8 @@ public class WishlistEditActivity extends Activity {
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
 		}
+=======
+>>>>>>> parent of 767ebd9... Added auto update
         if(data.getString("instance_url", null) == null){
         final EditText input = new EditText(this);
         // input.setText("http://192.168.1.101/teacher-wishlist/wishlist-edit.php");
