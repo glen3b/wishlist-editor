@@ -22,6 +22,7 @@ public final class R {
         public static final int go=0x7f060003;
         public static final int password=0x7f060001;
         public static final int showlist=0x7f060004;
+        public static final int update=0x7f060006;
         public static final int wishlist=0x7f060000;
     }
     public static final class layout {
@@ -34,5 +35,6 @@ public final class R {
         public static final int listshow=0x7f040004;
         public static final int password=0x7f040001;
         public static final int submit=0x7f040002;
+        public static final int update=0x7f040006;
     }
 }

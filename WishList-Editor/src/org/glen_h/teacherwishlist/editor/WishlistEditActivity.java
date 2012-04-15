@@ -40,7 +40,10 @@ import org.apache.http.message.BasicNameValuePair;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
@@ -194,6 +197,22 @@ public class WishlistEditActivity extends Activity {
         passwd = (EditText) findViewById(R.id.password);
         wishlist_choose = (Spinner) findViewById(R.id.wishlist);
         final SharedPreferences data = getSharedPreferences("Wishlist_Cloud_Editor", 0);
+        Button update = (Button) findViewById(R.id.update);
+        try {
+			if(Float.parseFloat(downloadFile(makeURL("http://wishlist-editor.googlecode.com/files/wapp_latestversion"))[0]) > Float.parseFloat(getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0 ).versionName)){
+				update.setVisibility(View.VISIBLE);
+				update.setOnClickListener(new View.OnClickListener() {
+		            public void onClick(View v) {
+		            	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://wishlist-editor.googlecode.com/files/Wishlist-Editor_"+downloadFile(makeURL("http://wishlist-editor.googlecode.com/files/wapp_latestversion"))[0]+".apk"));
+		            	startActivity(browserIntent);
+		            }
+		        });
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+		}
         if(data.getString("instance_url", null) == null){
         final EditText input = new EditText(this);
         // input.setText("http://192.168.1.101/teacher-wishlist/wishlist-edit.php");

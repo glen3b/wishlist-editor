@@ -9,5 +9,6 @@
     <string name="addhint">Item Name to Add</string>
     <string name="listshow">Show Wishlist</string>
     <string name="defaults">Change default instance</string>
+    <string name="update">Apply Update</string>
 
 </resources>

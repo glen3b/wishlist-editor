@@ -64,5 +64,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/defaults" />
+    
+    <Button
+        android:id="@+id/update"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/update" />
 
 </LinearLayout>
