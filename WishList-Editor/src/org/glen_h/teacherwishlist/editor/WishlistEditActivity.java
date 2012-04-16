@@ -282,6 +282,10 @@ public class WishlistEditActivity extends Activity {
 				}else if(status == 500){
 					// Web script error
 					makeSimpleConfirmDialog("ERROR", "An error occurred in the script. Please contact the server administrator.");
+				}else if(status < 400){
+						makeSimpleConfirmDialog("Success", "Adding the item to the wishlist was successful.\nHTTP Status Code: "+status);
+				}else if(status >= 400){
+						makeSimpleConfirmDialog("ERROR", "Adding the item to the wishlist was not successful.\nHTTP Status Code: "+status);
 				}
               }
         });
@@ -337,6 +341,10 @@ public class WishlistEditActivity extends Activity {
                     	    					}else if(status == 500){
                     	    						// Web script error
                     	    						makeSimpleConfirmDialog("ERROR", "An error occurred in the script. Please contact the server administrator.");
+                    	    					}else if(status < 400){
+                    	    						makeSimpleConfirmDialog("Success", "Renaming the item on the wishlist was successful.\nHTTP Status Code: "+status);
+                    	    					}else if(status >= 400){
+                    	    						makeSimpleConfirmDialog("ERROR", "Renaming the item on the wishlist was not successful.\nHTTP Status Code: "+status);
                     	    					}
             	    	                   }
             	    	               }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -367,7 +375,11 @@ public class WishlistEditActivity extends Activity {
            	    					   }else if(status == 500){
            	    						// Web script error
            	    						makeSimpleConfirmDialog("ERROR", "An error occurred in the script. Please contact the server administrator.");
-           	    					}
+           	    					}else if(status < 400){
+        	    						makeSimpleConfirmDialog("Success", "Removing the item from the wishlist was successful.\nHTTP Status Code: "+status);
+        	    					}else if(status >= 400){
+        	    						makeSimpleConfirmDialog("ERROR", "Renaming the item from the wishlist was not successful.\nHTTP Status Code: "+status);
+        	    					}
             	    	           }
             	    	       });
             	    	builder.show();
