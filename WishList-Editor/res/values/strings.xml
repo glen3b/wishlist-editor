@@ -5,7 +5,7 @@
     <string-array name="wishlists">
         <item >UNKNOWN</item>
     </string-array>
-    <string name="submit">Change Wishlist</string>
+    <string name="submit">Add Item</string>
     <string name="addhint">Item Name to Add</string>
     <string name="listshow">Show Wishlist</string>
     <string name="defaults">Change default instance</string>
