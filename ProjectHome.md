@@ -1,0 +1,1 @@
+A wishlist editor compatible with Glen's wishlist suite. See [wishlist viewer](http://code.google.com/p/wishlist-viewer/). An instance of Glen's wishlist suite for his school is running on [the school website](http://highlygiftedmagnet.com/site/teacher-wishlist/) and [his site](http://glen3b.pagekite.me/teacher-wishlist/).
